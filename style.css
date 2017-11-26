@@ -1,0 +1,53 @@
+div {
+    font-family: "Tahoma", Geneva, sans-serif;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+}
+
+.title_left {
+    width: 77%;
+    text-align: left;
+    float: left;
+    padding-left: 3%;
+}
+.title_right {
+    float: right;
+    width: 20%;
+}
+
+.left {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    float: left;
+    width: 87%;
+    margin-top:10px;
+    padding-left: 3%;
+    padding-top: 3px;
+    text-align: left;
+    background-color: #ccc;
+}
+
+/* Place text to the right */
+.right {
+    float: right;
+    margin-top:10px;
+    width: 10%;
+}
+
+.bottom {
+    color: grey;
+    font-size: 13px;
+    padding-top: 7px;
+    margin-bottom: 5px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;    
+}

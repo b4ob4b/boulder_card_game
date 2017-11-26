@@ -1,0 +1,30 @@
+ <!-- Add icon library -->
+ <!DOCTYPE html>
+ <html>
+ <link rel="stylesheet" href="style.css">
+
+ <div class="card">
+ 	<div class="row">
+ 		<h1 class="title_left">{{.Name}}</h1>
+ 		<h1 class="title_right">{{.Number}}</h1>
+ 	</div> 
+
+ 	
+ 	<img src="{{.ImagePath}}" alt="Image" style="width:100%">
+
+ 	<div class="row">
+ 	 	{{range $i, $a := .Ability}}
+	 		<div class="left">
+	 			<div>{{ $a }}</div>
+	 		</div>
+	 		{{range $score := index $.Score $i}}
+	 		<div class="right">
+	 			<div>{{  $score  }}</div>
+	 		</div>
+ 		{{end}}{{end}}
+
+ 		<div class="bottom">{{.Bottom}}</div>
+
+ 	</div>
+ </div>
+ </html>
