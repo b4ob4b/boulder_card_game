@@ -1,20 +1,24 @@
 # boulder_card_game
-trading card game for my climbing friends
+trading card game for my friends
+
+# you can create these nice cards:
+
+![card Peter](card_games/template/output_png/card_Peter.png "")
+
+with creating a csv with all names, numbers, abilities and a bottom line in folder structure like following:
+card_games
+    - template/
+        - output_html/
+            - style.css
+        - output_png/
+        - list_cards.csv
+        
+then you can run:
 
 ```bash
-go run go_html.go
+go run create_card.go card_games/template/list_cards.csv
+python convert_crop.py card_games/template
 ```
 
-![card Julian](card_Julian.png "")
 
-## next steps
 
-provide a txt-File with
-* Name
-* Number
-* ImagePath
-* Ability
-* Score
-* Bottom
-
-and let go read this file to create the card
