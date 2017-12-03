@@ -3,11 +3,14 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"flag"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
+	"strings"
 	"text/template"
 )
 
@@ -24,7 +27,7 @@ type Data struct {
 	Bottom    string
 }
 
-func (data *Data) create_html_card() {
+func (data *Data) create_html_card(path string) {
 
 	tmpl := `
 	<!DOCTYPE html>
@@ -36,8 +39,8 @@ func (data *Data) create_html_card() {
 			<h1 class="title_left">{{.Name}}</h1>
 			<h1 class="title_right">{{.Number}}</h1>
 		</div>
-
-		<img src="{{.ImagePath}}" alt="Image" style="width:100%">
+		
+		<div class="image_container"><img src="{{.ImagePath}}" alt="Image"></div>
 
 		<div class="row">
 		 	{{  range $ability := .Abilities }}
@@ -57,7 +60,7 @@ func (data *Data) create_html_card() {
 	`
 
 	t := template.Must(template.New("webpage").Parse(tmpl))
-	f, _ := os.OpenFile("card_"+data.Name+".html", os.O_CREATE|os.O_WRONLY, 0777)
+	f, _ := os.OpenFile(path+"/output_html/card_"+data.Name+".html", os.O_CREATE|os.O_WRONLY, 0777)
 	defer f.Close()
 
 	err := t.Execute(f, data)
@@ -66,15 +69,27 @@ func (data *Data) create_html_card() {
 		panic(err)
 	}
 
-	fmt.Println(data.Name)
+	fmt.Println(data.Name+"'s card was saved in", path)
 }
 
 func main() {
 
-	for climber := 1; climber < 3; climber++ {
-		path := "list_climbers.csv"
-		card_data := read_csv(path, climber)
-		card_data.create_html_card()
+	flag.Parse()
+	args := flag.Args()
+	if len(args) < 1 {
+		fmt.Println("Please provide path to csv.")
+		os.Exit(1)
+	}
+
+	path_to_csv := args[0]
+	number_of_cards := number_rows_csv(path_to_csv)
+	slice_path := strings.Split(path_to_csv, "/")
+	slice_path = []string(slice_path)
+	path_to_dir := strings.Join(slice_path[0:(len(slice_path)-1)], "/")
+
+	for card := 1; card < number_of_cards; card++ {
+		card_data := read_csv(path_to_csv, card)
+		card_data.create_html_card(path_to_dir)
 	}
 
 }
@@ -131,4 +146,27 @@ func read_csv(path string, row int) *Data {
 		counter += 1
 	}
 	return (&d)
+}
+
+func number_rows_csv(path string) int {
+	source, _ := os.Open(path)
+
+	// Create a new reader.
+	var reader = csv.NewReader(bufio.NewReader(source))
+	reader.Comma = ','
+
+	var counter int
+	counter = 0
+
+	for {
+		_, err := reader.Read()
+		// Stop at EOF.
+		if err == io.EOF {
+			break
+		}
+
+		counter += 1
+
+	}
+	return counter
 }
